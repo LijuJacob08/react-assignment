@@ -1,39 +1,64 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabContext from '@mui/material/TabContext';
-import TabList from '@mui/material/TabList';
-import TabPanel from '@mui/material/TabPanel';
+import Typography from '@mui/material/Typography';
 
-import UserList from './UserList';
-import PostList from './PostList';
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const Home=()=> {
-    const [value, setValue] = React.useState('1');
+ const [value, setValue] = React.useState(1);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-  
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
  
 
   return (
-    
+      <Box sx={{ width: '100%' }}>
         <Box sx={{ width: '100%', typography: 'body1' }}>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label="Users" value="1" />
-                <Tab label="Posts" value="2" />
-              </TabList>
-            </Box>
-            <TabPanel value="1">Users</TabPanel>
-            <TabPanel value="2">Item Two</TabPanel>
-          </TabContext>
+         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Item One" {...a11yProps(0)} />
+          <Tab label="Item Two" {...a11yProps(1)} />
+          <Tab label="Item Three" {...a11yProps(2)} />
+        </Tabs>
         </Box>
-      );
-    
-    
+        <TabPanel value={value} index={0}>
+          Item One
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          Item Two
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          Item Three
+        </TabPanel>
+      </Box>
+    );
   }
 
 export default Home;
