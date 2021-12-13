@@ -25,7 +25,7 @@ const useFetchUser = (url) => {
                 
             
                 setData(data);
-                console.log(data);
+                //console.log(data);
                 setError(null);
                 setIsPending(false);
                  // console.log(data);
