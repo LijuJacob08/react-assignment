@@ -3,8 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import ListUser from './ListUser';
+// import ListUser from './ListUser';
 import PostList from './PostList';
+import LsUser from './LsUser';
 
 
 function TabPanel(props) {
@@ -19,7 +20,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 2}}>
+        <Box sx={{ p: 3}}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -52,7 +53,8 @@ const Home=()=> {
         </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <ListUser/>
+          {/* <ListUser/> */}
+          <LsUser/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <PostList/>
