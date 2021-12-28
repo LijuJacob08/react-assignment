@@ -3,13 +3,14 @@ import Button from '@mui/material/Button';
 //import Button from '@material-ui/core/Button';
 //import { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
+import { useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import Tooltip from '@mui/material/Tooltip';
+//import Tooltip from '@mui/material/Tooltip';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 //import useFetchUser from './useFetchUser';
@@ -22,17 +23,70 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 //import { Alert } from '@mui/material';
 
-export default function AddPostButton() {
+export default function UpdateRecord(prop) {
+ const postId = prop.postId;
+  console.log(postId);
+  const [postData,setPostData]=useState('');
+  const [isPending,setIsPending]=useState(null);
+  const [error,setError]=useState(null);
+
+  //data from the postlist
+  useEffect( ()=>{
+      
+    fetch('https://jsonplaceholder.typicode.com/posts/'+postId)
+    .then(res => {
+        if(!res.ok){
+            throw Error('could not fetch the data for that resource');
+        }
+    return res.json();
+    })
+    .then(pdata => {
+  //   if (data && Object.keys(data).length !== 0){
+      // pdata.map((post)=>{
+      //   //  if (data && Object.keys(data).length !== 0){
+      //     data.map((udata)=>{
+      //     if (post.userId===udata.id)
+      //     { post.userId = udata.username;}
+      //     //console.log(post);
+      //     })
+      //     //console.log(post);
+      //     return post;
+      
+      // })
+//    }
+         //return post;
+            //console.log(pdata);
+            setTitle(pdata.title);
+				setBody(pdata.body);
+				//setUsername(pdata.username);
+				//setId(pdata.id);
+            //setPostData(pdata);
+       
+        setError(null);
+        setIsPending(false);
+//}
+})
+    .catch(err=>{
+
+        setIsPending(false);
+        setError(err.message);
+       });
+        
+}, []); 
+
+
+  //data from the postlist 
   const [sopen, setSopen] = useState(false);
   const {data} = useContext(UserData);
+  console.log(postData);
 // here uname value is userId
   const [uname, setUname] = useState('');
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(postData.title);
   const [body, setBody] = useState('');
   const [open, setOpen] = useState(false);
   //const {data}= useFetchUser('https://jsonplaceholder.typicode.com/users');
   
-
+console.log(title);
   function Alert(props) {
 		return <MuiAlert elevation={4} variant="filled" {...props} />;
   }
@@ -40,6 +94,7 @@ export default function AddPostButton() {
     setOpen(true);
   };
 
+  
   const handleClose = () => {
     setOpen(false);
   };
@@ -60,7 +115,7 @@ export default function AddPostButton() {
   {
     //const newpost={title,body,uname}
   fetch('https://jsonplaceholder.typicode.com/posts', {
-  method: 'POST',
+  method: 'PUT',
   body: JSON.stringify({
     title: {title},
     body: {body},
@@ -68,7 +123,7 @@ export default function AddPostButton() {
   }),
   headers: {
     'Content-type': 'application/json; charset=UTF-8',
-  },
+  },  
 }
 )
   .then((response) => response.json())
@@ -85,18 +140,18 @@ export default function AddPostButton() {
 
   return (
     <div>
-        <Tooltip title="Add" placement="right-start">
+        {/* <Tooltip title="Add" placement="right-start">
       <Button variant="contained" onClick={handleClickOpen}>
         <b>ADD[+]</b>
       </Button>
-      </Tooltip>
+      </Tooltip> */}
       {/* <form  onSubmit={handleSubmit} autoComplete="off"> */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add a New Post:-</DialogTitle>
+      <Dialog open={true} onClose={handleClose}>
+        <DialogTitle>Update Post:-</DialogTitle>
         <DialogContent>
         
           <DialogContentText>
-           It's always good to write, why not write a post.
+           Update the post for Post id
     
           </DialogContentText>
           
@@ -168,7 +223,7 @@ export default function AddPostButton() {
       <Snackbar open={sopen} autoHideDuration={6000} onClose={handleSclose}>
  
         <Alert onClose={handleSclose} severity="success">
-          Post Added successfully
+          Post Updated successfully
         </Alert>
       </Snackbar>
       {/* </form> */}

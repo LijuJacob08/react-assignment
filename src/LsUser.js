@@ -1,17 +1,18 @@
 import * as React from 'react';
+import { useState ,useContext} from "react";
 import MUIDataTable from "mui-datatables";
 //import Typography from '@mui/material/Typography';
-import useFetchUser from './useFetchUser';
+//import useFetchUser from './useFetchUser';
 import Modal from "@material-ui/core/Modal";
 import PostModal from './PostModal';
-import { useState } from "react";
+import { UserData } from './contexts/UserData';
 
 const LsUser =()=>
 { 
-
-  const {data,isPending,error} =useFetchUser('https://jsonplaceholder.typicode.com/users');
+  const {data,isPending,error} = useContext(UserData);
+  
   const [userId,setUserId]= useState(null);
-
+  //console.log(data);
   const [openRow, setOpenRow] = useState(false);  
   const [Username, setUsername] = useState(null);
 
@@ -73,7 +74,7 @@ const LsUser =()=>
          filter: true,
          sort: false,
         }
-       },
+       }
    ]; 
    
    const handleRowClick = (rowData, e) => {
@@ -101,22 +102,23 @@ const LsUser =()=>
 
 
   return(
-    <div className="Users-List">
-            {error && <div> {error}</div>}    
+
+   <div className="Users-List">
+           {error && <div> {error}</div>}     
             {isPending && <div>Loading...</div>}
                      
-            { data && <div>
-             
+            
+            { data && <div>           
             
               <MUIDataTable
                 title={"User List:"}
                 data={data}
                 columns={columns}
                 options={options}
+               
               />
                
-              </div> }
-
+               </div> }
             <div>
                   <Modal open={openRow} onClose={rowClose}>
                   <div >
@@ -128,7 +130,9 @@ const LsUser =()=>
                   </div>
                   </Modal>
                   </div>
-              </div>
+                   
+              </div> 
+              
     );
 }
 

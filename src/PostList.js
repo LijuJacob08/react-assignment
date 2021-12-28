@@ -8,6 +8,9 @@ import MUIDataTable from 'mui-datatables';
 import Modal from "@material-ui/core/Modal";
 import Comments from './Comments';
 import UseFetchPost from './useFetchPost';
+import UpdateRecord from './UpdateRecord';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const PostList = () => {
     // const [pdata,setPdata]= useState(null); 
@@ -15,17 +18,52 @@ const PostList = () => {
     // const [error,setError] =useState(null);
     // const {data} = useFetchUser('https://jsonplaceholder.typicode.com/users');
     const {pdata,error,isPending}= UseFetchPost('https://jsonplaceholder.typicode.com/posts');
-    const [postId, setPostId] = useState(null);
-
+    const [postId, setPostId] = useState('');
+    //const [formdata,setFormData]=useState('')
 	const [openRow, setOpenRow] = useState(false);  
+  const [sopen, setSopen] = useState(false);
 
+    //for Edit modal
+    const [openuRow, setOpenURow] = useState(false);  
     const rowClose = () => {
 		setOpenRow(false);
+	};
+
+
+  const handleClick = () => {
+    setSopen(true);
+  };
+  const handleSclose = () => {
+    setSopen(false);
+  };
+
+    const rowuClose = () => {
+		setOpenURow(false);
 	};
     const rowClick = (id) => {
 		setOpenRow(true);
 		setPostId(id);
 	};
+  const EditClick = (id) => {
+    setOpenURow(true);
+		setPostId(id);
+   console.log(postId);
+
+	};
+  function Alert(props) {
+		return <MuiAlert elevation={4} variant="filled" {...props} />;
+  }
+
+    // const rowClick1 = (rowdata) => {
+	// 	setOpenRow(true);
+	// 	setFormData(rowdata);
+	// };
+    
+    
+
+
+
+
     
     //    useEffect( ()=>{
       
@@ -66,8 +104,6 @@ const PostList = () => {
        
     
   
-  
-  
   const columns = [
     { name: 'userId', label:'Username',options: {
         filter: true,
@@ -92,52 +128,75 @@ const PostList = () => {
             filter: true,
             sort: false,
             empty: true,
-            customBodyRenderLite: (rowIndex) => {
-                return (
-                    <button
-                        onClick={(e) => {
-                            handleDelete(
-                                e.stopPropagation(),
-                                pdata,
-                                rowIndex
-                            );
-                        }}
-                    >
+            // customBodyRenderLite: (dataIndex) => {
+            //     return (
+            //         <button
+            //             onClick={(e) => {
+            //                 handleDelete(
+            //                   e.stopPropagation();
+                
+            //                   EditClick(tableMeta.rowData[1]);
+            //                 );
+            //             }}
+            //         >
+            customBodyRender: (value, tableMeta, updateValue) => {
+              return (
+                <button onClick={(e) =>{
+                  e.stopPropagation();
+                  
+                  handleDelete(tableMeta.rowData[1]);
+  
+                }}>
                         Delete
                     </button>
                 );
             },
         },
     },
-    {name:'',
-        label: "Update",
+    {
+        name: "Edit",
         options: {
-            customBodyRender: (value, tableMeta, updateValue) => {
-                return (
-                    <button onClick={() => console.log(value, tableMeta) }>
-                        Edit
-                    </button>
-                )
-                 
-            }
+          filter: false,
+          sort: false,
+          empty: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <button onClick={(e) =>{
+                e.stopPropagation();
+                
+                EditClick(tableMeta.rowData[1]);
+
+              }
+              }>
+                Edit
+              </button>
+            );
+          }
         }
-    },
-   
+      },
     ];
-    const handleDelete =(id,item, index)=>{
-        setOpenRow(false);
-		setPostId(id);
-        fetch('https://jsonplaceholder.typicode.com/posts/'+{id}, {
-            method: 'DELETE',
-          });
-    }
+   // const handleDelete =(id,item, index)=>{
+     const handleDelete=(id)=>{
+       console.log(id);
+       fetch('https://jsonplaceholder.typicode.com/posts/'+id, {
+             method: 'DELETE',
+          }).then(
+            handleClick()
+          );
+        }
+    
    
      const handleRowClick = (rowData, e) => {
 	 	rowClick(rowData[1]);
 	 };
+    //  const handleEdit = (rowData, e) => {
+    //     rowClick1(rowData);
+    // };
     const options = {
 		filterType: "checkbox",
-		onRowClick: handleRowClick,
+		onRowClick: handleRowClick,handleDelete,
+        //viewColumns:true,
+
 	};
   
     return ( 
@@ -155,10 +214,26 @@ const PostList = () => {
                 columns={columns}
                 options={options}
             />
+
          </div>}
 </div> 
 
  <div>
+
+            {/* Edit button modal */}
+            <Modal open={openuRow} onClose={rowuClose}>
+				<div>
+					<button onClick={rowuClose}>
+						X
+					</button>
+					{/* <h2 id="simple-modal-title">Update blog</h2> */}
+          {/* {console.log(postId)} */}
+				  	<UpdateRecord  postId={postId}/> 
+					{/* <button onClick={rowuClose}>Cancel</button> */}
+				</div>
+			</Modal>
+
+
         <Modal open={openRow} onClose={rowClose}>
 				<div >
 					<button  onClick={rowClose}>
@@ -168,8 +243,15 @@ const PostList = () => {
 					<Comments postId={postId} />
 				</div>
 			</Modal>
+      <Snackbar open={sopen} autoHideDuration={6000} onClose={handleSclose}>
+ 
+        <Alert onClose={handleSclose} severity="success">
+          Post deleted successfully
+        </Alert>
+      </Snackbar>
     </div>
-</div> );
+</div>
+ );
 }
 
         
