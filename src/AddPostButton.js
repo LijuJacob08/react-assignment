@@ -44,9 +44,7 @@ export default function AddPostButton() {
     setOpen(false);
   };
 
-  const handleSclose = () => {
-    setSopen(false);
-  };
+
   const handleChange = (event) => {
     setUname(event.target.value);
   };
@@ -54,7 +52,9 @@ export default function AddPostButton() {
   const handleClick = () => {
     setSopen(true);
   };
-
+  const handleSclose = () => {
+    setSopen(false);
+  };
   
   const handleSubmit=()=>
   {

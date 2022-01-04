@@ -44,5 +44,4 @@ useEffect(()=>{
     );
 }
  
-export default UserDataProvider
-;
+export default UserDataProvider;

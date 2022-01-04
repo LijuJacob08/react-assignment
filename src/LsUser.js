@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState ,useContext} from "react";
 import MUIDataTable from "mui-datatables";
-//import Typography from '@mui/material/Typography';
-//import useFetchUser from './useFetchUser';
 import Modal from "@material-ui/core/Modal";
 import PostModal from './PostModal';
 import { UserData } from './contexts/UserData';
@@ -10,7 +8,6 @@ import { UserData } from './contexts/UserData';
 const LsUser =()=>
 { 
   const {data,isPending,error} = useContext(UserData);
-  
   const [userId,setUserId]= useState(null);
   //console.log(data);
   const [openRow, setOpenRow] = useState(false);  
