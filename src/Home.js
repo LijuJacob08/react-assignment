@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
+//import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 // import ListUser from './ListUser';
 import PostList from './PostList';
@@ -23,7 +23,9 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3}}>
-          <Typography>{children}</Typography>
+          {/* <Typography>{children}</Typography> */}
+          {children}
+        
         </Box>
       )}
     </div>
