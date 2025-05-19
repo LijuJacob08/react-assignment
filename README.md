@@ -1,7 +1,7 @@
 
 # Getting Started with Create React App
 
-hello world this a new line which got added
+This a new line which got added
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
