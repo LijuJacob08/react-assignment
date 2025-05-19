@@ -1,18 +1,16 @@
-# name: Notify Discord on PR
+name: Notify Discord on PR Open
 
-# on:
-#   pull_request:
-#     types: [opened]
+on:
+  pull_request:
+    types: [opened]
 
-# jobs:
-#   discordNotification:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Send message to Discord
-#         run: |
-#           curl -H "Content-Type: application/json" \
-#                 -d '{
-#                  "username": "GitHub Bot",
-#                  "content": "📣 A new Pull Request was opened: **${{ github.event.pull_request.title }}**\n👉 URL: ${{ github.event.pull_request.html_url }}"
-#                }' \
-#                ${{ secrets.DISCORD_WEBHOOK_URL }}
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send PR Notification to Discord
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"content\": \"📢 **New PR:** [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }}) by **${{ github.actor }}**\"}" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
